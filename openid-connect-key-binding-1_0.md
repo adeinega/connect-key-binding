@@ -131,43 +131,43 @@ For the Authorization Code Flow:
 +------+                              +------+
 ```
 
-The Device Authorization Flow follows the pattern of the Authorization Code Flow but settings `c_hash` to `device_code` in place of the authorization `code`.
+The Device Authorization Flow follows the pattern of the Authorization Code Flow but sets `c_s256` to SHA-256 of the `device_code` in place of the authorization `code`.
 
 1. adding the `bound_key` scope and `dpop_jkt` parameter to the OpenID Connect Authentication Request
 2. receiving the `device_code` as usual in the Device Authentication Response
 3. user opens browser to Verification URI
 4. user authentications and consents 
-5. adding the `DPoP` header that includes the hash of the `device code`, `c_hash`, as a claim in the Token Request to the OP `token_endpoint`
+5. adding the `DPoP` header that includes the SHA-256 hash of the `device code`, `c_s256`, as a claim in the Token Request to the OP `token_endpoint`
 6. adding the `cnf` claim containing the public key to the returned ID Token
 
 ```
-+----------+                              +------+
-|          |-- Authentication Request --->|      |
-|    RP    |   (1) bound_key & dpop_jkt   |  OP  |
-| (device  |                              |      |
-| client)  |<-- Authentication Response --|      |
-|          |   (2) device_code, user code |      |
-|          |       & Verification URI     |      |
-|          |                              |      |
-|          |   [polling]                  |      |
-|          |-- Token Request ------------>|      |
-|          |   (5) DPoP header w/ c_hash  |      |
-|          |   c_hash = device_code       |      |
-|          |                              |      |
-|          |<-- Token Response -----------|      |
-|          |   (6) cnf claim containing   |      |
-|          |   the public key in ID Token |      |
-+----------+                              |      |
-      v                                   |      |
-      :                                   |      |
-     (3) user code & verification URI     |      |
-      :                                   |      |
-      v                                   |      |
-+----------+                              |      |
-| End user |                              |      |
-|    at    |<-- (4). End user consents -->|      |
-|  browser |    & authenticates           |      |
-+----------+                              +------+
++----------+                                +------+
+|          |-- Authentication Request ----->|      |
+|    RP    |   (1) bound_key & dpop_jkt     |  OP  |
+| (device  |                                |      |
+| client)  |<-- Authentication Response ----|      |
+|          |   (2) device_code, user code   |      |
+|          |       & Verification URI       |      |
+|          |                                |      |
+|          |   [polling]                    |      |
+|          |-- Token Request -------------->|      |
+|          |   (5) DPoP header w/ c_s256    |      |
+|          |   c_s256 = SHA256(device_code) |      |
+|          |                                |      |
+|          |<-- Token Response -------------|      |
+|          |   (6) cnf claim containing     |      |
+|          |   the public key in ID Token   |      |
++----------+                                |      |
+      v                                     |      |
+      :                                     |      |
+     (3) user code & verification URI       |      |
+      :                                     |      |
+      v                                     |      |
++----------+                                |      |
+| End user |                                |      |
+|    at    |<-- (4). End user consents ---->|      |
+|  browser |    & authenticates             |      |
++----------+                                +------+
 ```
 
 ## OpenID Connect Metadata
@@ -292,9 +292,8 @@ Once the OP has authenticated and obtained consent from the user, the OP respond
 In addition to the parameters required by [@!RFC8628] the token request to the OP must contain a DPoP header.
 The RP authenticating component computes this DPoP header as follows:
 
-1. generates a `c_hash` by computing a SHA256 hash of the authorization `device_code`
-2. converts the hash to BASE64URL
-3. generates a `DPoP` header, including the `c_hash` claim in the `DPoP` header JWT. This binds the authorization `device_code` to the token request.
+1. generates `c_s256` by computing SHA-256 hash of the authorization `device_code` encoded as `BASE64URL(SHA256(device_code))`
+2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `device_code` to the token request.
 
 Non-normative example of a token request:
 
@@ -306,12 +305,12 @@ Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6\
  IkVDIiwieCI6InVrcHYzZlU2dHFRS2FVd2NkQkFRb0szSUh2SklXX185eU5kMW\
  9SN3F2WmMiLCJ5IjoibkJCeFhyeDBOeml3Z19ldmZVTVVVZ25HS0tVZjJBVHBX\
- RzlFb2puVW9VNCJ9LCJ0eXAiOiJkcG9wK2p3dCJ9.eyJjX2hhc2giOiJ6LTZLS\
+ RzlFb2puVW9VNCJ9LCJ0eXAiOiJkcG9wK2p3dCJ9.eyJjX3MyNTYiOiJ6LTZLS\
  k1GNjcxUFFLWFN1SUhBVlFmbkVWUjJ4MUFVc2ZIbHZDNTB2YTM4IiwiaHRtIjo\
  iUE9TVCIsImh0dSI6Imh0dHBzOi8vc2VydmVyLmV4YW1wbGUuY29tL3Rva2VuI\
  iwiaWF0IjoxNzYxOTM3NDQ5LCJqdGkiOiJJUVM1dFlQLWJwQlB0SnNvclQ0ejd\
- nIn0.i162_6CXMAAP4BQ_fcDqPjU3wLfjJNSuxPqv995YlEa0Lj__13Lu4oytk\
- g1HJy_T2eQwRDd_rKxKc9ClVWoeUQ
+ nIn0.9t65IuqqvabsJp4v9CpY_pj7ad97KCdR9LXXF-pFvUokP_h2OZ2KqlM10\
+ O-l-vebFVHk0qbm1pcw3MWH_VhO7A
 grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code
 &device_code=GmRhmhcxhwAzkoEqiMEg_DnyEysNkuNhszIySk9eS
 &client_id=app_fzr7iWr50CWQkGDrLCZBYQc4_2Ak
@@ -324,8 +323,8 @@ If a DPoP header is included in the token request to the OP, and the `dpop_jkt` 
 The OP MUST:
 
 - perform all verification steps as described in [@!RFC9449] section 5.
-- calculate the `c_hash` from the authorization `device_code` just as the RP component did.
-- confirm the `c_hash` in the DPoP JWT matches its calculated `c_hash`
+- calculate the `c_s256` from the authorization `device_code` just as the RP component did.
+- confirm the `c_s256` in the DPoP JWT matches its calculated `c_s256`
 
 ## Token Response
 
