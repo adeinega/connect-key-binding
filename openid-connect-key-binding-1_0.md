@@ -110,7 +110,7 @@ This specification profiles how to bind a public key to an ID Token by:
 
 1. adding the `bound_key` scope and `dpop_jkt` parameter to the OpenID Connect Authentication Request
 2. receiving the authorization `code` as usual in the Authentication Response
-3. adding the `DPoP` header that includes the hash of the `code`, `c_hash`, as a claim in the Token Request to the OP `token_endpoint`
+3. adding the `DPoP` header that includes the SHA-256 hash of the `code`, `c_s256`, as a claim in the Token Request to the OP `token_endpoint`
 4. adding the `cnf` claim containing the public key to the returned ID Token
 
 ```
@@ -122,7 +122,7 @@ This specification profiles how to bind a public key to an ID Token by:
 |      |   (2) authorization code     |      | 
 |      |                              |      | 
 |      |-- Token Request ------------>|      |
-|      |   (3) DPoP header w/ c_hash  |      |
+|      |   (3) DPoP header w/ c_s256  |      |
 |      |                              |      |
 |      |<-- Token Response -----------|      |
 |      |   (4) cnf claim containing   |      |
@@ -191,9 +191,8 @@ TBD
 
 To obtain the ID Token, the RP authenticating component:
 
-1. generates a `c_hash` by computing a SHA256 hash of the authorization `code`
-2. converts the hash to BASE64URL 
-3. generates a `DPoP` header, including the `c_hash` claim in the `DPoP` header JWT. This binds the authorization code to the token request. 
+1. generates `c_s256` by computing SHA256 hash of the authorization `code` encoded as `BASE64URL(SHA256(code))`
+2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `code` to the token request.
 
 Non-normative example of a confidential client setting `Authorization: Basic` per [@!OpenID.Core] 3.1.3.1:
 
@@ -205,12 +204,12 @@ Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6\
  IkVDIiwieCI6InVrcHYzZlU2dHFRS2FVd2NkQkFRb0szSUh2SklXX185eU5kMW\
  9SN3F2WmMiLCJ5IjoibkJCeFhyeDBOeml3Z19ldmZVTVVVZ25HS0tVZjJBVHBX\
- RzlFb2puVW9VNCJ9LCJ0eXAiOiJkcG9wK2p3dCJ9.eyJjX2hhc2giOiJvMXVCc\
+ RzlFb2puVW9VNCJ9LCJ0eXAiOiJkcG9wK2p3dCJ9.eyJjX3MyNTYiOiJvMXVCc\
  DllU2UzRHNtU2NOMGpZcmlGZ0tLRmRLLUJMeXdDOVdScFY1R0c4IiwiaHRtIjo\
  iUE9TVCIsImh0dSI6Imh0dHBzOi8vc2VydmVyLmV4YW1wbGUuY29tL3Rva2VuI\
  iwiaWF0IjoxNzYxOTM3NDQ5LCJqdGkiOiJJUVM1dFlQLWJwQlB0SnNvclQ0ejd\
- nIn0.HEIQCKMXQcavGXWVV4D3NGMGI6Ca_vyXhkPYGX_Xp7jSoS8iVr_USnY-Q\
- pEgS5pmIOyqQhbto4FzKJmhVRcjNQ
+ nIn0.ay7H-sV7o_NE19Qfdq7oFNZ_oH-8LRw7_dgiTRQAUusLjEhgzNYR1ZU1T\
+ 6IZGopiTEk55LPu_g0gKKku96d4kA
 grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA
 &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
 ```
@@ -222,8 +221,8 @@ If a DPoP header is included in the token request to the OP, and the `dpop_jkt` 
 The OP MUST:
 
 - perform all verification steps as described in [@!RFC9449] section 5.
-- calculate the `c_hash` from the authorization `code` just as the RP component did.
-- confirm the `c_hash` in the DPoP JWT matches its calculated `c_hash`
+- calculate the `c_s256` from the authorization `code` just as the RP component did.
+- confirm the `c_s256` in the DPoP JWT matches its calculated `c_s256`
 
 ## Token Response
 
@@ -262,6 +261,12 @@ The mechanism for how an RP authenticating component proves to an RP consuming c
 An RP authenticating component SHOULD only share an ID Token with a consuming component when such sharing is consistent with the original purpose for which the PII was collected and the scope of consent obtained from the user.
 
 # Security Considerations
+
+## Public Key Substitution Attacks
+
+A public key substitution attack is a type of Unknown Key Share (UKS) attack in which an adversary binds the adversary identity to another party's key.
+
+To protect against such attacks, the `DPoP` header JWT sent in the Token Request MUST include the `c_s256` claim which contains the SHA-256 of the authorization `code`. This prevents replaying of the `DPoP` header JWTs between authentication sessions as each `DPoP` header JWT in a Token Request is now strictly bound to the specific authentication `code` for that session.
 
 ## Require Proof of Possession
 
