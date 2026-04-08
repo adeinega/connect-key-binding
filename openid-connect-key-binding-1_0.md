@@ -231,7 +231,7 @@ HTTP/1.1 302 Found
 
 ## Authentication Response - Device Authorization Flow
 
-As per [@!RFC8628] the, OP in response to the Authentication Request, generates and returns to the RP authenticating component the required parameters `device_code`, `user_code`, `verification_uri` and `expires_in` and may return the optional parameters `verification_uri_complete` and `interval`.
+As per [@!RFC8628], the OP in response to the Authentication Request, generates and returns to the RP authenticating component the required parameters `device_code`, `user_code`, `verification_uri` and `expires_in` and may return the optional parameters `verification_uri_complete` and `interval`.
 
 Following is a non-normative example of an authentication response using the device authorization flow:
 
