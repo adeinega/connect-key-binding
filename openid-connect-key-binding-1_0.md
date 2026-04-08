@@ -224,7 +224,7 @@ Following is a non-normative example of a response:
 
 ```text
 HTTP/1.1 302 Found
-  Location: https://client.example.org/cb?
+Location: https://client.example.org/cb?
     code=SplxlOBeZQQYbYS6WxSbIA
     &state=af0ifjsldkj
 ```
