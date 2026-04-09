@@ -243,7 +243,7 @@ Following is a non-normative example of an authentication response using the dev
 "user_code":"059-461-148",
 "verification_uri":"https://client.example.org/device",
 "verification_uri_complete":"https://client.example.org/?user_code=059-461-148",
-"expires_in":300000
+"expires_in": 1800
 }
 ```
 
