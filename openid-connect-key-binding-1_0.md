@@ -250,7 +250,7 @@ Non-normative example of the ID Token payload:
 ```
 
 The OP MAY return a Refresh Token.
-If a Refresh Token is returned, it MUST be bound the public key of the DPoP proof used in the Token Request i.e. the same public key bound to the ID Token.
+If a Refresh Token is returned, it MUST be bound to the public key of the DPoP proof used in the Token Request i.e. the same public key bound to the ID Token.
 
 ## Refresh Request
 
@@ -280,7 +280,7 @@ grant_type=refresh_token&refresh_token=8xLOxBtZp8
 ```
 
 The OP MUST validate the Refresh Token and MUST validate the `DPoP` header presented.
-THE OP MUST reject the `DPoP` header if it is not signed with the public key that was bound to the presented Refresh Token in the initial Token Request.
+The OP MUST reject the `DPoP` header if it is not signed with the public key that was bound to the presented Refresh Token in the initial Token Request.
 
 If an ID Token is returned as a result of a Refresh Request, an additional requirement applies:
 
