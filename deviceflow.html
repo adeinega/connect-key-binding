@@ -10,20 +10,20 @@
 <meta content="
        OpenID Key Binding specifies how to bind a public key to an OpenID Connect ID Token using mechanisms defined in  , OAuth 2.0 Demonstrating Proof of Possession (DPoP). 
     " name="description">
-<meta content="xml2rfc 3.32.0" name="generator">
+<meta content="xml2rfc 3.33.0" name="generator">
 <meta content="security" name="keyword">
 <meta content="openid" name="keyword">
 <meta content="lifecycle" name="keyword">
 <meta content="openid-key-binding-1_0" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.32.0
+  xml2rfc 3.33.0
     Python 3.10.20
     ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.4
+    lxml 6.0.3
+    platformdirs 4.9.6
     pycountry 26.2.16
     PyYAML 6.0.3
     requests 2.33.1
@@ -1233,7 +1233,7 @@ li > p:last-of-type:only-child {
 <dd class="workgroup">OpenID Connect</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-04-08" class="published">8 April 2026</time>
+<time datetime="2026-04-09" class="published">9 April 2026</time>
     </dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
@@ -1539,7 +1539,9 @@ Host: server.example.com
 <p id="section-1.6-1">If the RP authenticating component is running on a device that does not support a web browser, it makes an authorization request per <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span> 3.1. In the request, the <code>scope</code> parameter MUST contain both <code>openid</code> and <code>bound_key</code>. The request MUST include the <code>dpop_jkt</code> parameter having the value of the JWK Thumbprint <span>[<a href="#RFC7638" class="cite xref">RFC7638</a>]</span> of the proof-of-possession public key using the SHA-256 hash function, as defined in <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> section 10.<a href="#section-1.6-1" class="pilcrow">¶</a></p>
 <p id="section-1.6-2">Following is a non-normative example of an authentication request using the device authorization flow:<a href="#section-1.6-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-1.6-3">
-<pre>POST /device/code?
+<pre>POST /device_authorization HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
 dpop_jkt=dnfb1T9jil_gOhti60baHs_WD_a4D8JN9VDJXbmBmGw
 &amp;scope=openid%20profile%20email%20bound_key
 &amp;client_id=s6BhdRkqt3
