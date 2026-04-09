@@ -10,23 +10,23 @@
 <meta content="
        OpenID Key Binding specifies how to bind a public key to an OpenID Connect ID Token using mechanisms defined in  , OAuth 2.0 Demonstrating Proof of Possession (DPoP). 
     " name="description">
-<meta content="xml2rfc 3.32.0" name="generator">
+<meta content="xml2rfc 3.33.0" name="generator">
 <meta content="security" name="keyword">
 <meta content="openid" name="keyword">
 <meta content="lifecycle" name="keyword">
 <meta content="openid-key-binding-1_0" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.32.0
+  xml2rfc 3.33.0
     Python 3.10.20
     ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.4
+    lxml 6.0.3
+    platformdirs 4.9.6
     pycountry 26.2.16
     PyYAML 6.0.3
-    requests 2.32.5
+    requests 2.33.1
     wcwidth 0.6.0
 -->
 <link href="openid-connect-key-binding-1_0.xml" rel="alternate" type="application/rfc+xml">
@@ -1218,7 +1218,7 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left"></td>
 <td class="center">openid-connect-key-binding</td>
-<td class="right">March 2026</td>
+<td class="right">April 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Hardt &amp; Heilman</td>
@@ -1233,7 +1233,7 @@ li > p:last-of-type:only-child {
 <dd class="workgroup">OpenID Connect</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-23" class="published">23 March 2026</time>
+<time datetime="2026-04-09" class="published">9 April 2026</time>
     </dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
@@ -1596,7 +1596,7 @@ If a Refresh Token is returned, it MUST be bound the public key of the DPoP proo
 <a href="#section-1.10" class="section-number selfRef">1.10. </a><a href="#name-refresh-request" class="section-name selfRef">Refresh Request</a>
         </h3>
 <p id="section-1.10-1">If a Refresh Token was returned in the Token Response, the RP may use the Refresh Token to make Refresh Requests to the OP's Token Endpoint and receive a refreshed ID Token (<span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span> 12).
-This Refresh Token MUST be bound to the same public key as the ID Token and the OP MUST validate a DPoP proof for this public key on each refresh request.<a href="#section-1.10-1" class="pilcrow">¶</a></p>
+This Refresh Token MUST be bound to the same public key as the ID Token and the OP MUST validate a DPoP proof (<span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> 5) for this public key on each refresh request.<a href="#section-1.10-1" class="pilcrow">¶</a></p>
 <p id="section-1.10-2">To refresh the ID Token, the RP authenticating component:<a href="#section-1.10-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1.10-3">
 <li id="section-1.10-3.1">
