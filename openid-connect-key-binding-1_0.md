@@ -204,7 +204,9 @@ If the RP authenticating component is running on a device that does not support 
 Following is a non-normative example of an authentication request using the device authorization flow:
 
 ```text
-POST /device/code?
+POST /device_authorization HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
 dpop_jkt=dnfb1T9jil_gOhti60baHs_WD_a4D8JN9VDJXbmBmGw
 &scope=openid%20profile%20email%20bound_key
 &client_id=s6BhdRkqt3
