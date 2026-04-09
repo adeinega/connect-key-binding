@@ -255,7 +255,7 @@ If a Refresh Token is returned, it MUST be bound the public key of the DPoP proo
 ## Refresh Request
 
 If a Refresh Token was returned in the Token Response, the RP may use the Refresh Token to make Refresh Requests to the OP's Token Endpoint and receive a refreshed ID Token ([@!OpenID.Core] 12).
-This Refresh Token MUST be bound to the same public key as the ID Token and the OP MUST validate a DPoP proof for this public key on each refresh request.
+This Refresh Token MUST be bound to the same public key as the ID Token and the OP MUST validate a DPoP proof ([@!RFC9449] 5) for this public key on each refresh request.
 
 To refresh the ID Token, the RP authenticating component:
 
