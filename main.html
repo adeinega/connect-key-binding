@@ -1281,19 +1281,25 @@ li > p:last-of-type:only-child {
                 <p id="section-toc.1-1.1.2.6.1"><a href="#section-1.6" class="auto internal xref">1.6</a>.  <a href="#name-authentication-request-devi" class="internal xref">Authentication Request - Device Authorization Flow</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.7">
-                <p id="section-toc.1-1.1.2.7.1"><a href="#section-1.7" class="auto internal xref">1.7</a>.  <a href="#name-authentication-response" class="internal xref">Authentication Response</a></p>
+                <p id="section-toc.1-1.1.2.7.1"><a href="#section-1.7" class="auto internal xref">1.7</a>.  <a href="#name-authentication-response-aut" class="internal xref">Authentication Response - Authorization Code Flow</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.8">
-                <p id="section-toc.1-1.1.2.8.1"><a href="#section-1.8" class="auto internal xref">1.8</a>.  <a href="#name-token-request" class="internal xref">Token Request</a></p>
+                <p id="section-toc.1-1.1.2.8.1"><a href="#section-1.8" class="auto internal xref">1.8</a>.  <a href="#name-authentication-response-dev" class="internal xref">Authentication Response - Device Authorization Flow</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.9">
-                <p id="section-toc.1-1.1.2.9.1"><a href="#section-1.9" class="auto internal xref">1.9</a>.  <a href="#name-token-response" class="internal xref">Token Response</a></p>
+                <p id="section-toc.1-1.1.2.9.1"><a href="#section-1.9" class="auto internal xref">1.9</a>.  <a href="#name-token-request-authorization" class="internal xref">Token Request - Authorization Code Flow</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.10">
-                <p id="section-toc.1-1.1.2.10.1"><a href="#section-1.10" class="auto internal xref">1.10</a>. <a href="#name-refresh-request" class="internal xref">Refresh Request</a></p>
+                <p id="section-toc.1-1.1.2.10.1"><a href="#section-1.10" class="auto internal xref">1.10</a>. <a href="#name-token-request-device-author" class="internal xref">Token Request - Device Authorization Flow</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.11">
-                <p id="section-toc.1-1.1.2.11.1"><a href="#section-1.11" class="auto internal xref">1.11</a>. <a href="#name-id-token-proof-of-possessio" class="internal xref">ID Token Proof of Possession</a></p>
+                <p id="section-toc.1-1.1.2.11.1"><a href="#section-1.11" class="auto internal xref">1.11</a>. <a href="#name-token-response" class="internal xref">Token Response</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.12">
+                <p id="section-toc.1-1.1.2.12.1"><a href="#section-1.12" class="auto internal xref">1.12</a>. <a href="#name-refresh-request" class="internal xref">Refresh Request</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.13">
+                <p id="section-toc.1-1.1.2.13.1"><a href="#section-1.13" class="auto internal xref">1.13</a>. <a href="#name-id-token-proof-of-possessio" class="internal xref">ID Token Proof of Possession</a></p>
 </li>
             </ul>
 </li>
@@ -1364,7 +1370,7 @@ li > p:last-of-type:only-child {
 <p id="section-1-4">By binding a cryptographic key to the ID Token, the RP authenticating component can prove to RP consuming components not only that a user has been authenticated, but that the RP authenticating component itself was the original recipient of that authentication. This transforms the ID Token from a vulnerable bearer token into a proof-of-possession token that provides stronger security guarantees.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">The RP may also prove possession of the bound key when presenting an ID Token back to the OP.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">Use cases include: a mobile app that has received an ID Token exchanging the ID Token with a proof of possession with a first party authorization service for an access token; an instance of a peer to peer application such as video conferencing where one instance of the application sends the ID Token with a proof of possession to a second instance to prove which user is operating the first instance.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">This specification profiles OpenID Connect 1.0 <span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span>, RFC8628 - OAuth 2.0 Device Authorization Grant <span>[<a href="#RFC8626" class="cite xref">RFC8626</a>]</span>, and RFC9449 - OAuth 2.0 Demonstrating Proof of Possession (DPoP) <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to enable cryptographically bound ID Tokens that resist theft and replay attacks while maintaining compatibility with existing OpenID Connect infrastructure.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-7">This specification profiles OpenID Connect 1.0 <span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span>, RFC8628 - OAuth 2.0 Device Authorization Grant <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span>, and RFC9449 - OAuth 2.0 Demonstrating Proof of Possession (DPoP) <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to enable cryptographically bound ID Tokens that resist theft and replay attacks while maintaining compatibility with existing OpenID Connect infrastructure.<a href="#section-1-7" class="pilcrow">¶</a></p>
 <div id="requirements-notation-and-conventions">
 <section id="section-1.1">
         <h3 id="name-requirements-notation-and-c">
@@ -1404,22 +1410,23 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
         <h3 id="name-protocol-profile-overview">
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-protocol-profile-overview" class="section-name selfRef">Protocol Profile Overview</a>
         </h3>
-<p id="section-1.3-1">This specification profiles how to bind a public key to an ID Token by:<a href="#section-1.3-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-1.3-2">
-<li id="section-1.3-2.1">
-            <p id="section-1.3-2.1.1">adding the <code>bound_key</code> scope and <code>dpop_jkt</code> parameter to the OpenID Connect Authentication Request<a href="#section-1.3-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-1.3-1">This specification profiles how to bind a public key to an ID Token.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-2">For the Authorization Code Flow:<a href="#section-1.3-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1.3-3">
+<li id="section-1.3-3.1">
+            <p id="section-1.3-3.1.1">adding the <code>bound_key</code> scope and <code>dpop_jkt</code> parameter to the OpenID Connect Authentication Request<a href="#section-1.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-1.3-2.2">
-            <p id="section-1.3-2.2.1">receiving the authorization <code>code</code> as usual in the Authentication Response<a href="#section-1.3-2.2.1" class="pilcrow">¶</a></p>
+          <li id="section-1.3-3.2">
+            <p id="section-1.3-3.2.1">receiving the authorization <code>code</code> as usual in the Authentication Response<a href="#section-1.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-1.3-2.3">
-            <p id="section-1.3-2.3.1">adding the <code>DPoP</code> header that includes the SHA-256 hash of the <code>code</code>, <code>c_s256</code>, as a claim in the Token Request to the OP <code>token_endpoint</code><a href="#section-1.3-2.3.1" class="pilcrow">¶</a></p>
+          <li id="section-1.3-3.3">
+            <p id="section-1.3-3.3.1">adding the <code>DPoP</code> header that includes the SHA-256 hash of the <code>code</code>, <code>c_s256</code>, as a claim in the Token Request to the OP <code>token_endpoint</code><a href="#section-1.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-1.3-2.4">
-            <p id="section-1.3-2.4.1">adding the <code>cnf</code> claim containing the public key to the returned ID Token<a href="#section-1.3-2.4.1" class="pilcrow">¶</a></p>
+          <li id="section-1.3-3.4">
+            <p id="section-1.3-3.4.1">adding the <code>cnf</code> claim containing the public key to the returned ID Token<a href="#section-1.3-3.4.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<div class="alignLeft art-text artwork" id="section-1.3-3">
+<div class="alignLeft art-text artwork" id="section-1.3-4">
 <pre>+------+                              +------+
 |      |-- Authentication Request ---&gt;|      |
 |  RP  |   (1) bound_key &amp; dpop_jkt   |  OP  |
@@ -1434,7 +1441,58 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 |      |   (4) cnf claim containing   |      |
 |      |   the public key in ID Token |      |
 +------+                              +------+
-</pre><a href="#section-1.3-3" class="pilcrow">¶</a>
+</pre><a href="#section-1.3-4" class="pilcrow">¶</a>
+</div>
+<p id="section-1.3-5">The Device Authorization Flow follows the pattern of the Authorization Code Flow but sets <code>c_s256</code> to SHA-256 of the <code>device_code</code> in place of the authorization <code>code</code>.<a href="#section-1.3-5" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1.3-6">
+<li id="section-1.3-6.1">
+            <p id="section-1.3-6.1.1">adding the <code>bound_key</code> scope and <code>dpop_jkt</code> parameter to the OpenID Connect Authentication Request<a href="#section-1.3-6.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-1.3-6.2">
+            <p id="section-1.3-6.2.1">receiving the <code>device_code</code> as usual in the Device Authentication Response<a href="#section-1.3-6.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-1.3-6.3">
+            <p id="section-1.3-6.3.1">user opens browser to Verification URI<a href="#section-1.3-6.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-1.3-6.4">
+            <p id="section-1.3-6.4.1">user authentications and consents<a href="#section-1.3-6.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-1.3-6.5">
+            <p id="section-1.3-6.5.1">adding the <code>DPoP</code> header that includes the SHA-256 hash of the <code>device code</code>, <code>c_s256</code>, as a claim in the Token Request to the OP <code>token_endpoint</code><a href="#section-1.3-6.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-1.3-6.6">
+            <p id="section-1.3-6.6.1">adding the <code>cnf</code> claim containing the public key to the returned ID Token<a href="#section-1.3-6.6.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<div class="alignLeft art-text artwork" id="section-1.3-7">
+<pre>+----------+                                +------+
+|          |-- Authentication Request -----&gt;|      |
+|    RP    |   (1) bound_key &amp; dpop_jkt     |  OP  |
+| (device  |                                |      |
+| client)  |&lt;-- Authentication Response ----|      |
+|          |   (2) device_code, user code   |      |
+|          |       &amp; Verification URI       |      |
+|          |                                |      |
+|          |   [polling]                    |      |
+|          |-- Token Request --------------&gt;|      |
+|          |   (5) DPoP header w/ c_s256    |      |
+|          |   c_s256 = SHA256(device_code) |      |
+|          |                                |      |
+|          |&lt;-- Token Response -------------|      |
+|          |   (6) cnf claim containing     |      |
+|          |   the public key in ID Token   |      |
++----------+                                |      |
+      v                                     |      |
+      :                                     |      |
+     (3) user code &amp; verification URI       |      |
+      :                                     |      |
+      v                                     |      |
++----------+                                |      |
+| End user |                                |      |
+|    at    |&lt;-- (4). End user consents ----&gt;|      |
+|  browser |    &amp; authenticates             |      |
++----------+                                +------+
+</pre><a href="#section-1.3-7" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1484,43 +1542,71 @@ Host: server.example.com
 <p id="section-1.6-1">If the RP authenticating component is running on a device that does not support a web browser, it makes an authorization request per <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span> 3.1. In the request, the <code>scope</code> parameter MUST contain both <code>openid</code> and <code>bound_key</code>. The request MUST include the <code>dpop_jkt</code> parameter having the value of the JWK Thumbprint <span>[<a href="#RFC7638" class="cite xref">RFC7638</a>]</span> of the proof-of-possession public key using the SHA-256 hash function, as defined in <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> section 10.<a href="#section-1.6-1" class="pilcrow">¶</a></p>
 <p id="section-1.6-2">Following is a non-normative example of an authentication request using the device authorization flow:<a href="#section-1.6-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-1.6-3">
-<pre>TBD
-
+<pre>POST /device_authorization HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
+dpop_jkt=dnfb1T9jil_gOhti60baHs_WD_a4D8JN9VDJXbmBmGw
+&amp;scope=openid%20profile%20email%20bound_key
+&amp;client_id=s6BhdRkqt3
+&amp;nonce=KDOmGsiiMaiq-ZhBE-RmPgCsrH-bs-wqbqD2FsRWf7g
+Host: server.example.com
 </pre><a href="#section-1.6-3" class="pilcrow">¶</a>
 </div>
 <p id="section-1.6-4">If the OP does not support the <code>bound_key</code> scope, it SHOULD ignore it per <span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span> 3.1.2.1.<a href="#section-1.6-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="authentication-response">
+<div id="authentication-response-authorization-code-flow">
 <section id="section-1.7">
-        <h3 id="name-authentication-response">
-<a href="#section-1.7" class="section-number selfRef">1.7. </a><a href="#name-authentication-response" class="section-name selfRef">Authentication Response</a>
+        <h3 id="name-authentication-response-aut">
+<a href="#section-1.7" class="section-number selfRef">1.7. </a><a href="#name-authentication-response-aut" class="section-name selfRef">Authentication Response - Authorization Code Flow</a>
         </h3>
 <p id="section-1.7-1">If the key provided was not previously bound to the client, the OP SHOULD inform a user and obtain consent that a key binding will be done.<a href="#section-1.7-1" class="pilcrow">¶</a></p>
 <p id="section-1.7-2">On successful authentication of, and consent from the user, the OP returns an authorization <code>code</code>.<a href="#section-1.7-2" class="pilcrow">¶</a></p>
 <p id="section-1.7-3">Following is a non-normative example of a response:<a href="#section-1.7-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-1.7-4">
-<pre>TBD
+<pre>HTTP/1.1 302 Found
+Location: https://client.example.org/cb?
+    code=SplxlOBeZQQYbYS6WxSbIA
+    &amp;state=af0ifjsldkj
 </pre><a href="#section-1.7-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
-<div id="token-request">
+<div id="authentication-response-device-authorization-flow">
 <section id="section-1.8">
-        <h3 id="name-token-request">
-<a href="#section-1.8" class="section-number selfRef">1.8. </a><a href="#name-token-request" class="section-name selfRef">Token Request</a>
+        <h3 id="name-authentication-response-dev">
+<a href="#section-1.8" class="section-number selfRef">1.8. </a><a href="#name-authentication-response-dev" class="section-name selfRef">Authentication Response - Device Authorization Flow</a>
         </h3>
-<p id="section-1.8-1">To obtain the ID Token, the RP authenticating component:<a href="#section-1.8-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-1.8-2">
-<li id="section-1.8-2.1">
-            <p id="section-1.8-2.1.1">generates <code>c_s256</code> by computing SHA256 hash of the authorization <code>code</code> encoded as <code>BASE64URL(SHA256(code))</code><a href="#section-1.8-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-1.8-1">As per <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span>, the OP in response to the Authentication Request, generates and returns to the RP authenticating component the required parameters <code>device_code</code>, <code>user_code</code>, <code>verification_uri</code> and <code>expires_in</code> and may return the optional parameters <code>verification_uri_complete</code> and <code>interval</code>.<a href="#section-1.8-1" class="pilcrow">¶</a></p>
+<p id="section-1.8-2">Following is a non-normative example of an authentication response using the device authorization flow:<a href="#section-1.8-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-json art-text artwork" id="section-1.8-3">
+<pre>{
+"device_code":"GmRhmhcxhwAzkoEqiMEg_DnyEysNkuNhszIySk9eS",
+"user_code":"059-461-148",
+"verification_uri":"https://client.example.org/device",
+"verification_uri_complete":"https://client.example.org/?user_code=059-461-148",
+"expires_in": 1800
+}
+</pre><a href="#section-1.8-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="token-request-authorization-code-flow">
+<section id="section-1.9">
+        <h3 id="name-token-request-authorization">
+<a href="#section-1.9" class="section-number selfRef">1.9. </a><a href="#name-token-request-authorization" class="section-name selfRef">Token Request - Authorization Code Flow</a>
+        </h3>
+<p id="section-1.9-1">To obtain the ID Token, the RP authenticating component:<a href="#section-1.9-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1.9-2">
+<li id="section-1.9-2.1">
+            <p id="section-1.9-2.1.1">generates <code>c_s256</code> by computing SHA256 hash of the authorization <code>code</code> encoded as <code>BASE64URL(SHA256(code))</code><a href="#section-1.9-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-1.8-2.2">
-            <p id="section-1.8-2.2.1">generates a <code>DPoP</code> header, including the <code>c_s256</code> claim in the <code>DPoP</code> header JWT. This binds the authorization <code>code</code> to the token request.<a href="#section-1.8-2.2.1" class="pilcrow">¶</a></p>
+          <li id="section-1.9-2.2">
+            <p id="section-1.9-2.2.1">generates a <code>DPoP</code> header, including the <code>c_s256</code> claim in the <code>DPoP</code> header JWT. This binds the authorization <code>code</code> to the token request.<a href="#section-1.9-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-1.8-3">Non-normative example of a confidential client setting <code>Authorization: Basic</code> per <span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span> 3.1.3.1:<a href="#section-1.8-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-1.8-4">
+<p id="section-1.9-3">Non-normative example of a confidential client setting <code>Authorization: Basic</code> per <span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span> 3.1.3.1:<a href="#section-1.9-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-1.9-4">
 <pre>POST /token HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
@@ -1536,37 +1622,95 @@ DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6\
  6IZGopiTEk55LPu_g0gKKku96d4kA
 grant_type=authorization_code&amp;code=SplxlOBeZQQYbYS6WxSbIA
 &amp;redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
-</pre><a href="#section-1.8-4" class="pilcrow">¶</a>
+</pre><a href="#section-1.9-4" class="pilcrow">¶</a>
 </div>
-<p id="section-1.8-5"><code>Authorization: Basic</code> HTTP header is only included if a confidential client is used.<a href="#section-1.8-5" class="pilcrow">¶</a></p>
-<p id="section-1.8-6">If a DPoP header is included in the token request to the OP, and the <code>dpop_jkt</code> parameter was not included in the authentication request, the OP MUST NOT include the <code>cnf</code> claim in the ID Token.<a href="#section-1.8-6" class="pilcrow">¶</a></p>
+<p id="section-1.9-5"><code>Authorization: Basic</code> HTTP header is only included if a confidential client is used.<a href="#section-1.9-5" class="pilcrow">¶</a></p>
+<p id="section-1.9-6">If a DPoP header is included in the token request to the OP, and the <code>dpop_jkt</code> parameter was not included in the authentication request, the OP MUST NOT include the <code>cnf</code> claim in the ID Token.<a href="#section-1.9-6" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-1.8-7.1">
-            <p id="section-1.8-7.1.1">This prevents an existing deployment using DPoP for access token from having them included in ID Tokens accidentally.<a href="#section-1.8-7.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="section-1.9-7.1">
+            <p id="section-1.9-7.1.1">This prevents an existing deployment using DPoP for access token from having key-bound ID Tokens issued accidentally.<a href="#section-1.9-7.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-1.8-8">The OP MUST:<a href="#section-1.8-8" class="pilcrow">¶</a></p>
+<p id="section-1.9-8">The OP MUST:<a href="#section-1.9-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.8-9.1">
-            <p id="section-1.8-9.1.1">perform all verification steps as described in <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> section 5.<a href="#section-1.8-9.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-1.9-9.1">
+            <p id="section-1.9-9.1.1">perform all verification steps as described in <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> section 5.<a href="#section-1.9-9.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.8-9.2">
-            <p id="section-1.8-9.2.1">calculate the <code>c_s256</code> from the authorization <code>code</code> just as the RP component did.<a href="#section-1.8-9.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.9-9.2">
+            <p id="section-1.9-9.2.1">calculate the <code>c_s256</code> from the authorization <code>code</code> just as the RP component did.<a href="#section-1.9-9.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.8-9.3">
-            <p id="section-1.8-9.3.1">confirm the <code>c_s256</code> in the DPoP JWT matches its calculated <code>c_s256</code><a href="#section-1.8-9.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.9-9.3">
+            <p id="section-1.9-9.3.1">confirm the <code>c_s256</code> in the DPoP JWT matches its calculated <code>c_s256</code><a href="#section-1.9-9.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="token-request-device-authorization-flow">
+<section id="section-1.10">
+        <h3 id="name-token-request-device-author">
+<a href="#section-1.10" class="section-number selfRef">1.10. </a><a href="#name-token-request-device-author" class="section-name selfRef">Token Request - Device Authorization Flow</a>
+        </h3>
+<p id="section-1.10-1">As per <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span> the RP authenticating component makes token requests to OP at regular intervals.
+Prior to the OP authenticating and obtaining consent from the user, the OP returns an error.
+Once the OP has authenticated and obtained consent from the user, the OP responds by returning the ID Token.<a href="#section-1.10-1" class="pilcrow">¶</a></p>
+<p id="section-1.10-2">In addition to the parameters required by <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span> the token request to the OP must contain a DPoP header.
+The RP authenticating component computes this DPoP header as follows:<a href="#section-1.10-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1.10-3">
+<li id="section-1.10-3.1">
+            <p id="section-1.10-3.1.1">generates <code>c_s256</code> by computing SHA-256 hash of the authorization <code>device_code</code> encoded as <code>BASE64URL(SHA256(device_code))</code><a href="#section-1.10-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-1.10-3.2">
+            <p id="section-1.10-3.2.1">generates a <code>DPoP</code> header, including the <code>c_s256</code> claim in the <code>DPoP</code> header JWT. This binds the authorization <code>device_code</code> to the token request.<a href="#section-1.10-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-1.10-4">Non-normative example of a token request:<a href="#section-1.10-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-1.10-5">
+<pre>POST /token HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6\
+ IkVDIiwieCI6InVrcHYzZlU2dHFRS2FVd2NkQkFRb0szSUh2SklXX185eU5kMW\
+ 9SN3F2WmMiLCJ5IjoibkJCeFhyeDBOeml3Z19ldmZVTVVVZ25HS0tVZjJBVHBX\
+ RzlFb2puVW9VNCJ9LCJ0eXAiOiJkcG9wK2p3dCJ9.eyJjX3MyNTYiOiJ6LTZLS\
+ k1GNjcxUFFLWFN1SUhBVlFmbkVWUjJ4MUFVc2ZIbHZDNTB2YTM4IiwiaHRtIjo\
+ iUE9TVCIsImh0dSI6Imh0dHBzOi8vc2VydmVyLmV4YW1wbGUuY29tL3Rva2VuI\
+ iwiaWF0IjoxNzYxOTM3NDQ5LCJqdGkiOiJJUVM1dFlQLWJwQlB0SnNvclQ0ejd\
+ nIn0.9t65IuqqvabsJp4v9CpY_pj7ad97KCdR9LXXF-pFvUokP_h2OZ2KqlM10\
+ O-l-vebFVHk0qbm1pcw3MWH_VhO7A
+grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code
+&amp;device_code=GmRhmhcxhwAzkoEqiMEg_DnyEysNkuNhszIySk9eS
+&amp;client_id=app_fzr7iWr50CWQkGDrLCZBYQc4_2Ak
+</pre><a href="#section-1.10-5" class="pilcrow">¶</a>
+</div>
+<p id="section-1.10-6">If a DPoP header is included in the token request to the OP, and the <code>dpop_jkt</code> parameter was not included in the authentication request, the OP MUST NOT include the <code>cnf</code> claim in the ID Token.<a href="#section-1.10-6" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-1.10-7.1">
+            <p id="section-1.10-7.1.1">This prevents an existing deployment using DPoP for access token from having key-bound ID Tokens issued accidentally.<a href="#section-1.10-7.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-1.10-8">The OP MUST:<a href="#section-1.10-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.10-9.1">
+            <p id="section-1.10-9.1.1">perform all verification steps as described in <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> section 5.<a href="#section-1.10-9.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.10-9.2">
+            <p id="section-1.10-9.2.1">calculate the <code>c_s256</code> from the authorization <code>device_code</code> just as the RP component did.<a href="#section-1.10-9.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.10-9.3">
+            <p id="section-1.10-9.3.1">confirm the <code>c_s256</code> in the DPoP JWT matches its calculated <code>c_s256</code><a href="#section-1.10-9.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="token-response">
-<section id="section-1.9">
+<section id="section-1.11">
         <h3 id="name-token-response">
-<a href="#section-1.9" class="section-number selfRef">1.9. </a><a href="#name-token-response" class="section-name selfRef">Token Response</a>
+<a href="#section-1.11" class="section-number selfRef">1.11. </a><a href="#name-token-response" class="section-name selfRef">Token Response</a>
         </h3>
-<p id="section-1.9-1">If the token request was successful, the OP MUST return an ID Token containing the <code>cnf</code> claim as defined in <span>[<a href="#RFC7800" class="cite xref">RFC7800</a>]</span> set to the jwk of the user's public key and with  <code>typ</code> set to <code>id_token+cnf</code> in the ID Token's protected header.<a href="#section-1.9-1" class="pilcrow">¶</a></p>
-<p id="section-1.9-2">Non-normative example of the ID Token payload:<a href="#section-1.9-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-json art-text artwork" id="section-1.9-3">
+<p id="section-1.11-1">If the token request was successful, the OP MUST return an ID Token containing the <code>cnf</code> claim as defined in <span>[<a href="#RFC7800" class="cite xref">RFC7800</a>]</span> set to the jwk of the user's public key and with  <code>typ</code> set to <code>id_token+cnf</code> in the ID Token's protected header.<a href="#section-1.11-1" class="pilcrow">¶</a></p>
+<p id="section-1.11-2">Non-normative example of the ID Token payload:<a href="#section-1.11-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-json art-text artwork" id="section-1.11-3">
 <pre>{
     "iss": "https://server.example.com",
     "sub": "24400320",
@@ -1584,30 +1728,30 @@ grant_type=authorization_code&amp;code=SplxlOBeZQQYbYS6WxSbIA
             }
         }
 }
-</pre><a href="#section-1.9-3" class="pilcrow">¶</a>
+</pre><a href="#section-1.11-3" class="pilcrow">¶</a>
 </div>
-<p id="section-1.9-4">The OP MAY return a Refresh Token.
-If a Refresh Token is returned, it MUST be bound to the public key of the DPoP proof used in the Token Request i.e. the same public key bound to the ID Token.<a href="#section-1.9-4" class="pilcrow">¶</a></p>
+<p id="section-1.11-4">The OP MAY return a Refresh Token.
+If a Refresh Token is returned, it MUST be bound to the public key of the DPoP proof used in the Token Request i.e. the same public key bound to the ID Token.<a href="#section-1.11-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="refresh-request">
-<section id="section-1.10">
+<section id="section-1.12">
         <h3 id="name-refresh-request">
-<a href="#section-1.10" class="section-number selfRef">1.10. </a><a href="#name-refresh-request" class="section-name selfRef">Refresh Request</a>
+<a href="#section-1.12" class="section-number selfRef">1.12. </a><a href="#name-refresh-request" class="section-name selfRef">Refresh Request</a>
         </h3>
-<p id="section-1.10-1">If a Refresh Token was returned in the Token Response, the RP may use the Refresh Token to make Refresh Requests to the OP's Token Endpoint and receive a refreshed ID Token (<span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span> 12).
-This Refresh Token MUST be bound to the same public key as the ID Token and the OP MUST validate a DPoP proof (<span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> 5) for this public key on each refresh request.<a href="#section-1.10-1" class="pilcrow">¶</a></p>
-<p id="section-1.10-2">To refresh the ID Token, the RP authenticating component:<a href="#section-1.10-2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-1.10-3">
-<li id="section-1.10-3.1">
-            <p id="section-1.10-3.1.1">generates a <code>DPoP</code> header<a href="#section-1.10-3.1.1" class="pilcrow">¶</a></p>
+<p id="section-1.12-1">If a Refresh Token was returned in the Token Response, the RP may use the Refresh Token to make Refresh Requests to the OP's Token Endpoint and receive a refreshed ID Token (<span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span> 12).
+This Refresh Token MUST be bound to the same public key as the ID Token and the OP MUST validate a DPoP proof (<span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> 5) for this public key on each refresh request.<a href="#section-1.12-1" class="pilcrow">¶</a></p>
+<p id="section-1.12-2">To refresh the ID Token, the RP authenticating component:<a href="#section-1.12-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1.12-3">
+<li id="section-1.12-3.1">
+            <p id="section-1.12-3.1.1">generates a <code>DPoP</code> header<a href="#section-1.12-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-1.10-3.2">
-            <p id="section-1.10-3.2.1">makes a POST request to the OP's Token Endpoint with the <code>DPoP</code> header and the Refresh Token as a parameter.<a href="#section-1.10-3.2.1" class="pilcrow">¶</a></p>
+          <li id="section-1.12-3.2">
+            <p id="section-1.12-3.2.1">makes a POST request to the OP's Token Endpoint with the <code>DPoP</code> header and the Refresh Token as a parameter.<a href="#section-1.12-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-1.10-4">Non-normative example:<a href="#section-1.10-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-1.10-5">
+<p id="section-1.12-4">Non-normative example:<a href="#section-1.12-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-1.12-5">
 <pre>POST /token HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
@@ -1620,28 +1764,28 @@ DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6\
  opPNYiN7CpITgR0Fl1PYFFgIAbxPxs8N1llDPoQmR60il35b-Zez71eMkdM9gd\
  oqJkee3oKrimdrsCfA
 grant_type=refresh_token&amp;refresh_token=8xLOxBtZp8
-</pre><a href="#section-1.10-5" class="pilcrow">¶</a>
+</pre><a href="#section-1.12-5" class="pilcrow">¶</a>
 </div>
-<p id="section-1.10-6">The OP MUST validate the Refresh Token and MUST validate the <code>DPoP</code> header presented.
-The OP MUST reject the <code>DPoP</code> header if it is not signed with the public key that was bound to the presented Refresh Token in the initial Token Request.<a href="#section-1.10-6" class="pilcrow">¶</a></p>
-<p id="section-1.10-7">If an ID Token is returned as a result of a Refresh Request, an additional requirement applies:<a href="#section-1.10-7" class="pilcrow">¶</a></p>
+<p id="section-1.12-6">The OP MUST validate the Refresh Token and MUST validate the <code>DPoP</code> header presented.
+The OP MUST reject the <code>DPoP</code> header if it is not signed with the public key that was bound to the presented Refresh Token in the initial Token Request.<a href="#section-1.12-6" class="pilcrow">¶</a></p>
+<p id="section-1.12-7">If an ID Token is returned as a result of a Refresh Request, an additional requirement applies:<a href="#section-1.12-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.10-8.1">
-            <p id="section-1.10-8.1.1">its <code>cnf</code> claim MUST be the same as in the ID Token issued when the original authentication occurred.<a href="#section-1.10-8.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-1.12-8.1">
+            <p id="section-1.12-8.1.1">its <code>cnf</code> claim MUST be the same as in the ID Token issued when the original authentication occurred.<a href="#section-1.12-8.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-1.10-9">If a new Refresh Token is returned as a result of a Refresh Request, the newly issued Refresh Token MUST continue to be bound to the same public key as the original Refresh Token.<a href="#section-1.10-9" class="pilcrow">¶</a></p>
+<p id="section-1.12-9">If a new Refresh Token is returned as a result of a Refresh Request, the newly issued Refresh Token MUST continue to be bound to the same public key as the original Refresh Token.<a href="#section-1.12-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="id-token-proof-of-possession">
-<section id="section-1.11">
+<section id="section-1.13">
         <h3 id="name-id-token-proof-of-possessio">
-<a href="#section-1.11" class="section-number selfRef">1.11. </a><a href="#name-id-token-proof-of-possessio" class="section-name selfRef">ID Token Proof of Possession</a>
+<a href="#section-1.13" class="section-number selfRef">1.13. </a><a href="#name-id-token-proof-of-possessio" class="section-name selfRef">ID Token Proof of Possession</a>
         </h3>
-<p id="section-1.11-1">The mechanism for how an RP authenticating component proves to an RP consuming component that it possesses the private keys associated with the <code>cnf</code> claim in the ID Token is out of scope of this document.<a href="#section-1.11-1" class="pilcrow">¶</a></p>
+<p id="section-1.13-1">The mechanism for how an RP authenticating component proves to an RP consuming component that it possesses the private keys associated with the <code>cnf</code> claim in the ID Token is out of scope of this document.<a href="#section-1.13-1" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-1.11-2.1">
-            <p id="section-1.11-2.1.1">If the WG wants to, we can also profile how to use KB to bind a proof of possession to an ID Token for presentation when a proof of possession is not present.<a href="#section-1.11-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="section-1.13-2.1">
+            <p id="section-1.13-2.1.1">If the WG wants to, we can also profile how to use KB to bind a proof of possession to an ID Token for presentation when a proof of possession is not present.<a href="#section-1.13-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1750,10 +1894,6 @@ The OP MUST reject the <code>DPoP</code> header if it is not signed with the pub
 <dt id="RFC7800">[RFC7800]</dt>
         <dd>
 <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Proof-of-Possession Key Semantics for JSON Web Tokens (JWTs)"</span>, <span class="seriesInfo">RFC 7800</span>, <span class="seriesInfo">DOI 10.17487/RFC7800</span>, <time datetime="2016-04" class="refDate">April 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7800">https://www.rfc-editor.org/info/rfc7800</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8626">[RFC8626]</dt>
-        <dd>
-<span class="refTitle">"Not Issued"</span>, <span class="seriesInfo">RFC 8626</span>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8626">https://www.rfc-editor.org/info/rfc8626</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8628">[RFC8628]</dt>
         <dd>
