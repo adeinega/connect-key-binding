@@ -105,14 +105,16 @@ The OP's OpenID Connect Metadata Document [@!OpenID.Discovery] SHOULD include:
 - the `bound_key` scope in the `supported_scopes`
 - the `dpop_signing_alg_values_supported` property containing a list of supported algorithms as defined in [@?IANA.JOSE.ALGS]
 
-## Authorization Code Flow
+## Protocol Profile Overview
 
-The Authorization Code Flow works as follows:
+This spec works by adding parameters and headers to the Authentication Request and Token Request and validating these headers such that the ID Token returned in the Token Response contain a `cnf` claim for a public key.
 
-1. The RP performs OpenID Connect Authentication Request but with the addition of the `bound_key` scope and a `dpop_jkt`parameter set to the JWK Thumbprint [@!RFC7638] of the proof-of-possession public key.
-2. The OP authenticates the user and responds with the authorization `code` as usual in the Authentication Response.
-3. The RP makes a Token Request to the OP `token_endpoint` with a `DPoP` header that includes the SHA-256 hash of the `code`, `c_s256`, claims.
-4. The OP returns an ID Token that has a the `cnf` claim containing the RP specified proof-of-possession public key
+For the Authorization Code Flow the following changes are made
+
+1. adding the `bound_key` scope and `dpop_jkt` parameter to the OpenID Connect Authentication Request
+2. receiving the authorization `code` as usual in the Authentication Response
+3. adding the `DPoP` header that includes the SHA-256 hash of the `code`, `c_s256`, as a claim in the Token Request to the OP `token_endpoint`
+4. adding the `cnf` claim containing the public key to the returned ID Token
 
 ```
 +------+                              +------+
@@ -131,7 +133,43 @@ The Authorization Code Flow works as follows:
 +------+                              +------+
 ```
 
-### Authentication Request - Authorization Code Flow
+The Device Authorization Flow follows the pattern of the Authorization Code Flow but sets `c_s256` to SHA-256 of the `device_code` in place of the authorization `code`.
+
+1. adding the `bound_key` scope and `dpop_jkt` parameter to the OpenID Connect Authentication Request
+2. receiving the `device_code` as usual in the Device Authentication Response
+3. user opens browser to Verification URI
+4. user authentications and consents 
+5. adding the `DPoP` header that includes the SHA-256 hash of the `device code`, `c_s256`, as a claim in the Token Request to the OP `token_endpoint`
+6. adding the `cnf` claim containing the public key to the returned ID Token
+
+```
++----------+                                +------+
+|          |-- Authentication Request ----->|      |
+|    RP    |   (1) bound_key & dpop_jkt     |  OP  |
+| (device  |                                |      |
+| client)  |<-- Authentication Response ----|      |
+|          |   (2) device_code, user code   |      |
+|          |       & Verification URI       |      |
+|          |                                |      |
+|          |   [polling]                    |      |
+|          |-- Token Request -------------->|      |
+|          |   (5) DPoP header w/ c_s256    |      |
+|          |   c_s256 = SHA256(device_code) |      |
+|          |                                |      |
+|          |<-- Token Response -------------|      |
++----------+                                +------+
+```
+
+## OpenID Connect Metadata
+
+The OP's OpenID Connect Metadata Document [@!OpenID.Discovery] SHOULD include:
+
+- the `bound_key` scope in the `supported_scopes`
+- the `dpop_signing_alg_values_supported` property containing a list of supported algorithms as defined in [@?IANA.JOSE.ALGS]
+
+# Authorization Code Flow
+
+## Authentication Request
 
 If the RP authenticating component is running on a device that supports a web browser, it makes an authorization request per [@!OpenID.Core] 3.1. In addition to the `scope` parameter containing `openid`, and the `response_type` having the value `code`, the `scope` parameter MUST also include `bound_key`, and the request MUST include the `dpop_jkt` parameter having the value of the JWK Thumbprint [@!RFC7638] of the proof-of-possession public key using the SHA-256 hash function, as defined in [@!RFC9449] section 10.
 
@@ -151,7 +189,7 @@ Host: server.example.com
 
 If the OP does not support the `bound_key` scope, it SHOULD ignore it per [@!OpenID.Core] 3.1.2.1.
 
-### Authentication Response - Authorization Code Flow
+## Authentication Response
 
 If the key provided was not previously bound to the client, the OP SHOULD inform a user and obtain consent that a key binding will be done.
 
@@ -166,7 +204,7 @@ Location: https://client.example.org/cb?
     &state=af0ifjsldkj
 ```
 
-### Token Request - Authorization Code Flow
+## Token Request
 
 To obtain the ID Token, the RP authenticating component:
 
@@ -205,48 +243,9 @@ The OP MUST:
 - calculate the `c_s256` from the authorization `code` just as the RP component did.
 - confirm the `c_s256` in the DPoP JWT matches its calculated `c_s256`
 
-## Device Authorization Flow
+# Device Authorization Flow
 
-The Device Authorization Flow follows the pattern of the Authorization Code Flow but sets `c_s256` to SHA-256 of the `device_code` in place of the authorization `code`.
-
-1. adding the `bound_key` scope and `dpop_jkt` parameter to the OpenID Connect Authentication Request
-2. receiving the `device_code` as usual in the Device Authentication Response
-3. user opens browser to Verification URI
-4. user authentications and consents 
-5. adding the `DPoP` header that includes the SHA-256 hash of the `device code`, `c_s256`, as a claim in the Token Request to the OP `token_endpoint`
-6. adding the `cnf` claim containing the public key to the returned ID Token
-
-```
-+----------+                                +------+
-|          |-- Authentication Request ----->|      |
-|    RP    |   (1) bound_key & dpop_jkt     |  OP  |
-| (device  |                                |      |
-| client)  |<-- Authentication Response ----|      |
-|          |   (2) device_code, user code   |      |
-|          |       & Verification URI       |      |
-|          |                                |      |
-|          |   [polling]                    |      |
-|          |-- Token Request -------------->|      |
-|          |   (5) DPoP header w/ c_s256    |      |
-|          |   c_s256 = SHA256(device_code) |      |
-|          |                                |      |
-|          |<-- Token Response -------------|      |
-|          |   (6) cnf claim containing     |      |
-|          |   the public key in ID Token   |      |
-+----------+                                |      |
-      v                                     |      |
-      :                                     |      |
-     (3) user code & verification URI       |      |
-      :                                     |      |
-      v                                     |      |
-+----------+                                |      |
-| End user |                                |      |
-|    at    |<-- (4). End user consents ---->|      |
-|  browser |    & authenticates             |      |
-+----------+                                +------+
-```
-
-### Authentication Request - Device Authorization Flow
+## Authentication Request
 
 If the RP authenticating component is running on a device that does not support a web browser, it makes an authorization request per [@!RFC8628] 3.1. In the request, the `scope` parameter MUST contain both `openid` and `bound_key`. The request MUST include the `dpop_jkt` parameter having the value of the JWK Thumbprint [@!RFC7638] of the proof-of-possession public key using the SHA-256 hash function, as defined in [@!RFC9449] section 10.
 
@@ -265,7 +264,7 @@ Host: server.example.com
 
 If the OP does not support the `bound_key` scope, it SHOULD ignore it per [@!OpenID.Core] 3.1.2.1.
 
-## Authentication Response - Device Authorization Flow
+## Authentication Response
 
 As per [@!RFC8628], the OP in response to the Authentication Request, generates and returns to the RP authenticating component the required parameters `device_code`, `user_code`, `verification_uri` and `expires_in` and may return the optional parameters `verification_uri_complete` and `interval`.
 
@@ -281,7 +280,7 @@ Following is a non-normative example of an authentication response using the dev
 }
 ```
 
-### Token Request - Device Authorization Flow
+## Token Request
 
 As per [@!RFC8628] the RP authenticating component makes token requests to OP at regular intervals.
 Prior to the OP authenticating and obtaining consent from the user, the OP returns an error.
@@ -389,7 +388,7 @@ If an ID Token is returned as a result of a Refresh Request, an additional requi
 
 If a new Refresh Token is returned as a result of a Refresh Request, the newly issued Refresh Token MUST continue to be bound to the same public key as the original Refresh Token.
 
-## ID Token Proof of Possession
+# ID Token Proof of Possession
 
 The mechanism for how an RP authenticating component proves to an RP consuming component that it possesses the private keys associated with the `cnf` claim in the ID Token is out of scope of this document.
 
@@ -439,12 +438,11 @@ Subtype name: dpop+id_token
 
 # Acknowledgements
 
-The authors would like to thank early feedback provided by Filip Skokan, Frederik Krogsdal Jacobsen, George Fletcher, Jacob Ideskog, Karl McGuinness, and Kosuke Koiwai.
-
+The authors would like to thank early feedback provided by Filip Skokan, Frederik Krogsdal Jacobsen, George Fletcher, Jacob Ideskog, Jonas Primbs, Karl McGuinness, and Kosuke Koiwai.
 
 # Notices
 
-Copyright (c) 2025 The OpenID Foundation.
+Copyright (c) 2026 The OpenID Foundation.
 
 The OpenID Foundation (OIDF) grants to any Contributor, developer,
 implementer, or other interested party a non-exclusive, royalty free,
