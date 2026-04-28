@@ -1377,9 +1377,9 @@ li > p:last-of-type:only-child {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">OpenID Connect is a protocol that enables a Relying Party (RP) to delegate authentication to and obtain identity claims from an OpenID Connect Provider (OP). When authenticating with OpenID Connect an RP initiates the protocol by making an authentication request to the OP. The OP after authenticates the identity of the user and sends the RP an ID Token signed by the OP and containing claims about the user.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">OpenID Connect is a protocol that enables a Relying Party (RP) to delegate authentication to and obtain identity claims from an OpenID Connect Provider (OP). When authenticating with OpenID Connect an RP initiates the protocol by making an authentication request to the OP. The OP authenticates the identity of the user and sends the RP an ID Token signed by the OP and containing claims about the user.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">It is common for an RP to be composed of multiple components such as a RP authenticating component that obtains the ID Token from the OP and an RP consuming component which checks the ID Token presented to it by the authenticating component. When the RP authenticating component wants to prove to an RP consuming component that it has authenticated a user, it may present the ID Token as a bearer token. However, bearer tokens are vulnerable to theft and replay attacks. For instance, if an attacker obtains the ID Token, they can impersonate the authenticated user.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">By binding a cryptographic key to the ID Token, the RP authenticating component can prove to RP consuming components not only that a user has been authenticated, but that the RP authenticating component itself was the original recipient of that authentication. This provides stronger security guarantees, prevent token theft and replay attacks, by transforming the ID Token from a bearer token into a proof-of-possession token.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-3">By binding a cryptographic key to the ID Token, the RP authenticating component can prove to RP consuming components not only that a user has been authenticated, but that the RP authenticating component itself was the original recipient of that authentication. This provides stronger security guarantees, preventing token theft and replay attacks, by transforming the ID Token from a bearer token into a proof-of-possession token.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">Use cases include: a mobile app that has received an ID Token exchanging the ID Token with a proof-of-possession with a first party authorization service for an access token; an instance of a peer to peer application such as video conferencing where one instance of the application sends the ID Token with a proof of possession to a second instance to prove which user is operating the first instance.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">This specification profiles OpenID Connect 1.0 <span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span>, RFC8628 - OAuth 2.0 Device Authorization Grant <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span>, and RFC9449 - OAuth 2.0 Demonstrating Proof of Possession (DPoP) <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to enable cryptographically bound ID Tokens that resist theft and replay attacks while maintaining compatibility with existing OpenID Connect infrastructure.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <div id="requirements-notation-and-conventions">
@@ -1437,7 +1437,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
         <h3 id="name-protocol-profile-overview">
 <a href="#section-1.4" class="section-number selfRef">1.4. </a><a href="#name-protocol-profile-overview" class="section-name selfRef">Protocol Profile Overview</a>
         </h3>
-<p id="section-1.4-1">This spec works by adding parameters and headers to the Authentication Request and Token Request and validating these headers such that the ID Token returned in the Token Response contain a <code>cnf</code> claim for a public key.<a href="#section-1.4-1" class="pilcrow">¶</a></p>
+<p id="section-1.4-1">This spec works by adding parameters and headers to the Authentication Request and Token Request and then validating these fields such that the ID Token returned in the Token Response contains a <code>cnf</code> claim for a public key.<a href="#section-1.4-1" class="pilcrow">¶</a></p>
 <p id="section-1.4-2">For the Authorization Code Flow the following changes are made<a href="#section-1.4-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1.4-3">
 <li id="section-1.4-3.1">
@@ -1482,7 +1482,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
             <p id="section-1.4-6.3.1">user opens browser to Verification URI<a href="#section-1.4-6.3.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-1.4-6.4">
-            <p id="section-1.4-6.4.1">user authentications and consents<a href="#section-1.4-6.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-6.4.1">user authenticates and consents<a href="#section-1.4-6.4.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-1.4-6.5">
             <p id="section-1.4-6.5.1">adding the <code>DPoP</code> header that includes the SHA-256 hash of the <code>device code</code>, <code>c_s256</code>, as a claim in the Token Request to the OP <code>token_endpoint</code><a href="#section-1.4-6.5.1" class="pilcrow">¶</a></p>
@@ -1649,7 +1649,6 @@ dpop_jkt=dnfb1T9jil_gOhti60baHs_WD_a4D8JN9VDJXbmBmGw
 &amp;scope=openid%20profile%20email%20bound_key
 &amp;client_id=s6BhdRkqt3
 &amp;nonce=KDOmGsiiMaiq-ZhBE-RmPgCsrH-bs-wqbqD2FsRWf7g
-Host: server.example.com
 </pre><a href="#section-3.1-3" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1-4">If the OP does not support the <code>bound_key</code> scope, it SHOULD ignore it per <span>[<a href="#OpenID.Core" class="cite xref">OpenID.Core</a>]</span> 3.1.2.1.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
@@ -1737,7 +1736,7 @@ grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code
         <h3 id="name-token-response">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-token-response" class="section-name selfRef">Token Response</a>
         </h3>
-<p id="section-3.4-1">If the token request was successful, the OP MUST return an ID Token containing the <code>cnf</code> claim as defined in <span>[<a href="#RFC7800" class="cite xref">RFC7800</a>]</span> set to the jwk of the user's public key and with  <code>typ</code> set to <code>id_token+cnf</code> in the ID Token's protected header.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">If the token request was successful, the OP MUST return an ID Token containing the <code>cnf</code> claim as defined in <span>[<a href="#RFC7800" class="cite xref">RFC7800</a>]</span> set to the jwk of the user's public key and with  <code>typ</code> set to <code>dpop+id_token</code> in the ID Token's protected header.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">Non-normative example of the ID Token payload:<a href="#section-3.4-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-json art-text artwork" id="section-3.4-3">
 <pre>{
@@ -1856,7 +1855,7 @@ The OP MUST reject the <code>DPoP</code> header if it is not signed with the pub
         <h3 id="name-id-token-reverification">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-id-token-reverification" class="section-name selfRef">ID Token Reverification</a>
         </h3>
-<p id="section-6.3-1">In addition to verifying the signature created by the RP authenticating component to prove possession of the private key associated with the <code>cnf</code> claim in the ID Token, an RP consuming component MUST independently verify the signature and validity of the ID Token and that the <code>aud</code> claim in the payload is the correct value, and that the <code>typ</code> claim in the protected header is <code>id_token+cnf</code>.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">In addition to verifying the signature created by the RP authenticating component to prove possession of the private key associated with the <code>cnf</code> claim in the ID Token, an RP consuming component MUST independently verify the signature and validity of the ID Token and that the <code>aud</code> claim in the payload is the correct value, and that the <code>typ</code> claim in the protected header is <code>dpop+id_token</code>.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="use-as-access-token">
