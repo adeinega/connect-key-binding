@@ -64,11 +64,11 @@ This specification defines how to bind a public key to an OpenID Connect ID Toke
 
 # Introduction
 
-OpenID Connect is a protocol that enables a Relying Party (RP) to delegate authentication to and obtain identity claims from an OpenID Connect Provider (OP). When authenticating with OpenID Connect an RP initiates the protocol by making an authentication request to the OP. The OP after authenticates the identity of the user and sends the RP an ID Token signed by the OP and containing claims about the user.
+OpenID Connect is a protocol that enables a Relying Party (RP) to delegate authentication to and obtain identity claims from an OpenID Connect Provider (OP). When authenticating with OpenID Connect an RP initiates the protocol by making an authentication request to the OP. The OP authenticates the identity of the user and sends the RP an ID Token signed by the OP and containing claims about the user.
 
 It is common for an RP to be composed of multiple components such as a RP authenticating component that obtains the ID Token from the OP and an RP consuming component which checks the ID Token presented to it by the authenticating component. When the RP authenticating component wants to prove to an RP consuming component that it has authenticated a user, it may present the ID Token as a bearer token. However, bearer tokens are vulnerable to theft and replay attacks. For instance, if an attacker obtains the ID Token, they can impersonate the authenticated user.
 
-By binding a cryptographic key to the ID Token, the RP authenticating component can prove to RP consuming components not only that a user has been authenticated, but that the RP authenticating component itself was the original recipient of that authentication. This provides stronger security guarantees, prevent token theft and replay attacks, by transforming the ID Token from a bearer token into a proof-of-possession token.
+By binding a cryptographic key to the ID Token, the RP authenticating component can prove to RP consuming components not only that a user has been authenticated, but that the RP authenticating component itself was the original recipient of that authentication. This provides stronger security guarantees, preventing token theft and replay attacks, by transforming the ID Token from a bearer token into a proof-of-possession token.
 
 Use cases include: a mobile app that has received an ID Token exchanging the ID Token with a proof-of-possession with a first party authorization service for an access token; an instance of a peer to peer application such as video conferencing where one instance of the application sends the ID Token with a proof of possession to a second instance to prove which user is operating the first instance.
 
@@ -107,7 +107,7 @@ The OP's OpenID Connect Metadata Document [@!OpenID.Discovery] SHOULD include:
 
 ## Protocol Profile Overview
 
-This spec works by adding parameters and headers to the Authentication Request and Token Request and validating these headers such that the ID Token returned in the Token Response contain a `cnf` claim for a public key.
+This spec works by adding parameters and headers to the Authentication Request and Token Request and then validating these fields such that the ID Token returned in the Token Response contains a `cnf` claim for a public key.
 
 For the Authorization Code Flow the following changes are made
 
@@ -138,7 +138,7 @@ The Device Authorization Flow follows the pattern of the Authorization Code Flow
 1. adding the `bound_key` scope and `dpop_jkt` parameter to the OpenID Connect Authentication Request
 2. receiving the `device_code` as usual in the Device Authentication Response
 3. user opens browser to Verification URI
-4. user authentications and consents 
+4. user authenticates and consents
 5. adding the `DPoP` header that includes the SHA-256 hash of the `device code`, `c_s256`, as a claim in the Token Request to the OP `token_endpoint`
 6. adding the `cnf` claim containing the public key to the returned ID Token
 
@@ -259,7 +259,6 @@ dpop_jkt=dnfb1T9jil_gOhti60baHs_WD_a4D8JN9VDJXbmBmGw
 &scope=openid%20profile%20email%20bound_key
 &client_id=s6BhdRkqt3
 &nonce=KDOmGsiiMaiq-ZhBE-RmPgCsrH-bs-wqbqD2FsRWf7g
-Host: server.example.com
 ```
 
 If the OP does not support the `bound_key` scope, it SHOULD ignore it per [@!OpenID.Core] 3.1.2.1.
@@ -325,7 +324,7 @@ The OP MUST:
 
 ## Token Response
 
-If the token request was successful, the OP MUST return an ID Token containing the `cnf` claim as defined in [@!RFC7800] set to the jwk of the user's public key and with  `typ` set to `id_token+cnf` in the ID Token's protected header.
+If the token request was successful, the OP MUST return an ID Token containing the `cnf` claim as defined in [@!RFC7800] set to the jwk of the user's public key and with  `typ` set to `dpop+id_token` in the ID Token's protected header.
 
 Non-normative example of the ID Token payload:
 
@@ -412,7 +411,7 @@ An RP consuming component MUST NOT trust an ID Token with a `cnf` claim without 
 
 ## ID Token Reverification
 
-In addition to verifying the signature created by the RP authenticating component to prove possession of the private key associated with the `cnf` claim in the ID Token, an RP consuming component MUST independently verify the signature and validity of the ID Token and that the `aud` claim in the payload is the correct value, and that the `typ` claim in the protected header is `id_token+cnf`.
+In addition to verifying the signature created by the RP authenticating component to prove possession of the private key associated with the `cnf` claim in the ID Token, an RP consuming component MUST independently verify the signature and validity of the ID Token and that the `aud` claim in the payload is the correct value, and that the `typ` claim in the protected header is `dpop+id_token`.
 
 ## Use as Access Token
 
