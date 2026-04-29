@@ -109,7 +109,11 @@ The OP's OpenID Connect Metadata Document [@!OpenID.Discovery] SHOULD include:
 
 This spec works by adding parameters and headers to the Authentication Request and Token Request and then validating these fields such that the ID Token returned in the Token Response contains a `cnf` claim for a public key.
 
-For the Authorization Code Flow the following changes are made
+This specification extends the OpenID Connect Authentication Request addition of the parameter `dpop_jkt` to the Authentication Request, and a `DPoP` header to the Token Request and Refresh Request. 
+The RP signals to the OP it is requesting a key bound ID Token by including the scope `bound_key` in the Authentication Request. If the OP chooses to key bound ID Token it validates the `dpop_jkt` parameter and `DPoP` and returns an ID Token in the Token Response that includes a `cnf` claim for the bound public key.
+This specification does not add new messages, requests or responses, preserving the current OpenID Connect flows and interactions.
+
+For the Authorization Code Flow the following changes are made:
 
 1. adding the `bound_key` scope and `dpop_jkt` parameter to the OpenID Connect Authentication Request
 2. receiving the authorization `code` as usual in the Authentication Response
@@ -133,7 +137,7 @@ For the Authorization Code Flow the following changes are made
 +------+                              +------+
 ```
 
-The Device Authorization Flow follows the pattern of the Authorization Code Flow but sets `c_s256` to SHA-256 of the `device_code` in place of the authorization `code`.
+The Device Authorization Flow follows the pattern of the Authorization Code Flow but sets `c_s256` to SHA-256 of the `device_code` in place of the authorization `code`, making the following changes:
 
 1. adding the `bound_key` scope and `dpop_jkt` parameter to the OpenID Connect Authentication Request
 2. receiving the `device_code` as usual in the Device Authentication Response
@@ -351,7 +355,7 @@ Non-normative example of the ID Token payload:
 The OP MAY return a Refresh Token.
 If a Refresh Token is returned, it MUST be bound to the public key of the DPoP proof used in the Token Request i.e. the same public key bound to the ID Token.
 
-## Refresh Request
+# Refresh Request
 
 If a Refresh Token was returned in the Token Response, the RP may use the Refresh Token to make Refresh Requests to the OP's Token Endpoint and receive a refreshed ID Token ([@!OpenID.Core] 12).
 This Refresh Token MUST be bound to the same public key as the ID Token and the OP MUST validate a DPoP proof ([@!RFC9449] 5) for this public key on each refresh request.
@@ -380,6 +384,7 @@ grant_type=refresh_token&refresh_token=8xLOxBtZp8
 
 The OP MUST validate the Refresh Token and MUST validate the `DPoP` header presented.
 The OP MUST reject the `DPoP` header if it is not signed with the public key that was bound to the presented Refresh Token in the initial Token Request.
+Unlike the Token Request, no `c_s256` claim is required in the the `DPoP`header for the Refresh Request.
 
 If an ID Token is returned as a result of a Refresh Request, an additional requirement applies:
 
