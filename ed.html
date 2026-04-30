@@ -1233,7 +1233,7 @@ li > p:last-of-type:only-child {
 <dd class="workgroup">OpenID Connect</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-04-29" class="published">29 April 2026</time>
+<time datetime="2026-04-30" class="published">30 April 2026</time>
     </dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
@@ -1438,7 +1438,7 @@ the use of <em>this fixed-width font</em>.<a href="#section-1.1-2" class="pilcro
 <a href="#section-1.4" class="section-number selfRef">1.4. </a><a href="#name-protocol-profile-overview" class="section-name selfRef">Protocol Profile Overview</a>
         </h3>
 <p id="section-1.4-1">This spec works by adding parameters and headers to the Authentication Request and Token Request and then validating these fields such that the ID Token returned in the Token Response contains a <code>cnf</code> claim for a public key.<a href="#section-1.4-1" class="pilcrow">¶</a></p>
-<p id="section-1.4-2">This specification extends the OpenID Connect Authentication Request addition of the parameter <code>dpop_jkt</code> to the Authentication Request, and a <code>DPoP</code> header to the Token Request and Refresh Request.
+<p id="section-1.4-2">This specification extends the OpenID Connect with the addition of the parameter <code>dpop_jkt</code> to the Authentication Request, and a <code>DPoP</code> header to the Token Request and Refresh Request.
 The RP signals to the OP it is requesting a key bound ID Token by including the scope <code>bound_key</code> in the Authentication Request. If the OP chooses to key bound ID Token it validates the <code>dpop_jkt</code> parameter and <code>DPoP</code> and returns an ID Token in the Token Response that includes a <code>cnf</code> claim for the bound public key.
 This specification does not add new messages, requests or responses, preserving the current OpenID Connect flows and interactions.<a href="#section-1.4-2" class="pilcrow">¶</a></p>
 <p id="section-1.4-3">For the Authorization Code Flow the following changes are made:<a href="#section-1.4-3" class="pilcrow">¶</a></p>
@@ -1817,11 +1817,6 @@ Unlike the Token Request, no <code>c_s256</code> claim is required in the the <c
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-id-token-proof-of-possessio" class="section-name selfRef">ID Token Proof of Possession</a>
       </h2>
 <p id="section-5-1">The mechanism for how an RP authenticating component proves to an RP consuming component that it possesses the private keys associated with the <code>cnf</code> claim in the ID Token is out of scope of this document.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-5-2.1">
-          <p id="section-5-2.1.1">If the WG wants to, we can also profile how to use KB to bind a proof of possession to an ID Token for presentation when a proof of possession is not present.<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
 </section>
 </div>
 <div id="privacy-considerations">
