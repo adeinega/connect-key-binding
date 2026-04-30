@@ -109,7 +109,7 @@ The OP's OpenID Connect Metadata Document [@!OpenID.Discovery] SHOULD include:
 
 This spec works by adding parameters and headers to the Authentication Request and Token Request and then validating these fields such that the ID Token returned in the Token Response contains a `cnf` claim for a public key.
 
-This specification extends the OpenID Connect Authentication Request addition of the parameter `dpop_jkt` to the Authentication Request, and a `DPoP` header to the Token Request and Refresh Request. 
+This specification extends the OpenID Connect with the addition of the parameter `dpop_jkt` to the Authentication Request, and a `DPoP` header to the Token Request and Refresh Request.
 The RP signals to the OP it is requesting a key bound ID Token by including the scope `bound_key` in the Authentication Request. If the OP chooses to key bound ID Token it validates the `dpop_jkt` parameter and `DPoP` and returns an ID Token in the Token Response that includes a `cnf` claim for the bound public key.
 This specification does not add new messages, requests or responses, preserving the current OpenID Connect flows and interactions.
 
@@ -395,8 +395,6 @@ If a new Refresh Token is returned as a result of a Refresh Request, the newly i
 # ID Token Proof of Possession
 
 The mechanism for how an RP authenticating component proves to an RP consuming component that it possesses the private keys associated with the `cnf` claim in the ID Token is out of scope of this document.
-
-> If the WG wants to, we can also profile how to use KB to bind a proof of possession to an ID Token for presentation when a proof of possession is not present.
 
 # Privacy Considerations
 
