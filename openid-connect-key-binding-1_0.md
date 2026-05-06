@@ -208,7 +208,7 @@ Location: https://client.example.org/cb?
 To obtain the ID Token, the RP authenticating component:
 
 1. generates `c_s256` by computing SHA256 hash of the authorization `code` encoded as `BASE64URL(SHA256(ASCII(code)))`
-2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `code` to the token request.
+2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `code` to the token request. The `typ` of the `DPoP` header JWT MUST be `dpop+jwt`.
 
 Non-normative example of a confidential client setting `Authorization: Basic` per [@!OpenID.Core] 3.1.3.1:
 
@@ -289,7 +289,7 @@ In addition to the parameters required by [@!RFC8628] the token request to the O
 The RP authenticating component computes this DPoP header as follows:
 
 1. generates `c_s256` by computing SHA-256 hash of the authorization `device_code` encoded as `BASE64URL(SHA256(ASCII(device_code)))`
-2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `device_code` to the token request.
+2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `device_code` to the token request. The `typ` of the `DPoP` header JWT MUST be `dpop+jwt`.
 
 Non-normative example of a token request:
 
@@ -359,7 +359,7 @@ This Refresh Token MUST be bound to the same public key as the ID Token and the 
 
 To refresh the ID Token, the RP authenticating component:
 
-1. generates a `DPoP` header
+1. generates a `DPoP` header. The `typ` of the `DPoP` header JWT MUST be `dpop+jwt`.
 2. makes a POST request to the OP's Token Endpoint with the `DPoP` header and the Refresh Token as a parameter.
 
 Non-normative example:
