@@ -208,7 +208,7 @@ Location: https://client.example.org/cb?
 To obtain the ID Token, the RP authenticating component:
 
 1. generates `c_s256` by computing SHA256 hash of the authorization `code` encoded as `BASE64URL(SHA256(ASCII(code)))`
-2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `code` to the token request.
+2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `code` to the token request. The `typ` of the `DPoP` header JWT MUST be `dpop+id_token`.
 
 Non-normative example of a confidential client setting `Authorization: Basic` per [@!OpenID.Core] 3.1.3.1:
 
@@ -217,15 +217,15 @@ POST /token HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
-DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6\
- IkVDIiwieCI6InVrcHYzZlU2dHFRS2FVd2NkQkFRb0szSUh2SklXX185eU5kMW\
- 9SN3F2WmMiLCJ5IjoibkJCeFhyeDBOeml3Z19ldmZVTVVVZ25HS0tVZjJBVHBX\
- RzlFb2puVW9VNCJ9LCJ0eXAiOiJkcG9wK2p3dCJ9.eyJjX3MyNTYiOiJvMXVCc\
- DllU2UzRHNtU2NOMGpZcmlGZ0tLRmRLLUJMeXdDOVdScFY1R0c4IiwiaHRtIjo\
- iUE9TVCIsImh0dSI6Imh0dHBzOi8vc2VydmVyLmV4YW1wbGUuY29tL3Rva2VuI\
- iwiaWF0IjoxNzYxOTM3NDQ5LCJqdGkiOiJJUVM1dFlQLWJwQlB0SnNvclQ0ejd\
- nIn0.ay7H-sV7o_NE19Qfdq7oFNZ_oH-8LRw7_dgiTRQAUusLjEhgzNYR1ZU1T\
- 6IZGopiTEk55LPu_g0gKKku96d4kA
+DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0e\
+ SI6IkVDIiwieCI6IndHUGxvOFhNaVUyQXZmRjRwVmtnYU1DVF9Gal9vc1M5eWF\
+ QTU5iV3VKSDgiLCJ5IjoiaE1sUTF0enFNODFXcmVYcVZTU00tY1Y5MjJQUFBsV\
+ GdOV3BUQi1oZDBoZyJ9LCJ0eXAiOiJkcG9wK2lkX3Rva2VuIn0.eyJjX3MyNTY\
+ iOiJvMXVCcDllU2UzRHNtU2NOMGpZcmlGZ0tLRmRLLUJMeXdDOVdScFY1R0c4I\
+ iwiaHRtIjoiUE9TVCIsImh0dSI6Imh0dHBzOi8vc2VydmVyLmV4YW1wbGUuY29\
+ tL3Rva2VuIiwiaWF0IjoxNzYxOTM3NDQ5LCJqdGkiOiJJUVM1dFlQLWJwQlB0S\
+ nNvclQ0ejdnIn0.jL-tk6BVFHiWbsxGh46O3tmFGX_6bzkQyCtU1EDdt796fmR\
+ T7PLk-86yUpXCCd75eLBKIKWQdcz6VzDEIe1djA
 
 grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA
 &redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
@@ -289,7 +289,7 @@ In addition to the parameters required by [@!RFC8628] the token request to the O
 The RP authenticating component computes this DPoP header as follows:
 
 1. generates `c_s256` by computing SHA-256 hash of the authorization `device_code` encoded as `BASE64URL(SHA256(ASCII(device_code)))`
-2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `device_code` to the token request.
+2. generates a `DPoP` header, including the `c_s256` claim in the `DPoP` header JWT. This binds the authorization `device_code` to the token request. The `typ` of the `DPoP` header JWT MUST be `dpop+id_token`.
 
 Non-normative example of a token request:
 
@@ -298,15 +298,15 @@ POST /token HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
-DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6\
- IkVDIiwieCI6InVrcHYzZlU2dHFRS2FVd2NkQkFRb0szSUh2SklXX185eU5kMW\
- 9SN3F2WmMiLCJ5IjoibkJCeFhyeDBOeml3Z19ldmZVTVVVZ25HS0tVZjJBVHBX\
- RzlFb2puVW9VNCJ9LCJ0eXAiOiJkcG9wK2p3dCJ9.eyJjX3MyNTYiOiJ6LTZLS\
- k1GNjcxUFFLWFN1SUhBVlFmbkVWUjJ4MUFVc2ZIbHZDNTB2YTM4IiwiaHRtIjo\
- iUE9TVCIsImh0dSI6Imh0dHBzOi8vc2VydmVyLmV4YW1wbGUuY29tL3Rva2VuI\
- iwiaWF0IjoxNzYxOTM3NDQ5LCJqdGkiOiJJUVM1dFlQLWJwQlB0SnNvclQ0ejd\
- nIn0.9t65IuqqvabsJp4v9CpY_pj7ad97KCdR9LXXF-pFvUokP_h2OZ2KqlM10\
- O-l-vebFVHk0qbm1pcw3MWH_VhO7A
+DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0e\
+ SI6IkVDIiwieCI6Ii1McGVmWm1MbGZqYmp4a3Z0elYyb0VrUW1MeDFKVEhCamp\
+ ITDkwWFZMYVUiLCJ5IjoibklWeGR6ZkdpWGV1R2NoMHd5bGRhd0tWZ0RFTkthS\
+ DBjR3RSUGItd3NtOCJ9LCJ0eXAiOiJkcG9wK2lkX3Rva2VuIn0.eyJjX3MyNTY\
+ iOiJ6LTZLSk1GNjcxUFFLWFN1SUhBVlFmbkVWUjJ4MUFVc2ZIbHZDNTB2YTM4I\
+ iwiaHRtIjoiUE9TVCIsImh0dSI6Imh0dHBzOi8vc2VydmVyLmV4YW1wbGUuY29\
+ tL3Rva2VuIiwiaWF0IjoxNzYxOTM3NDQ5LCJqdGkiOiJJUVM1dFlQLWJwQlB0S\
+ nNvclQ0ejdnIn0.48bhNpmSKQTrCq7MgD5xF4Yx5tCsKhaR6WVZlVqjp8pTBUS\
+ Gc_6-9pXPZ2KtH80erTLB1qnctOr_R8xo6j2xIQ
 
 grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code
 &device_code=GmRhmhcxhwAzkoEqiMEg_DnyEysNkuNhszIySk9eS
@@ -359,7 +359,7 @@ This Refresh Token MUST be bound to the same public key as the ID Token and the 
 
 To refresh the ID Token, the RP authenticating component:
 
-1. generates a `DPoP` header
+1. generates a `DPoP` header. The `typ` of the `DPoP` header JWT MUST be `dpop+id_token`.
 2. makes a POST request to the OP's Token Endpoint with the `DPoP` header and the Refresh Token as a parameter.
 
 Non-normative example:
@@ -368,14 +368,14 @@ Non-normative example:
 POST /token HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
-DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6\
- IkVDIiwieCI6InVrcHYzZlU2dHFRS2FVd2NkQkFRb0szSUh2SklXX185eU5kMW\
- 9SN3F2WmMiLCJ5IjoibkJCeFhyeDBOeml3Z19ldmZVTVVVZ25HS0tVZjJBVHBX\
- RzlFb2puVW9VNCJ9LCJ0eXAiOiJkcG9wK2p3dCJ9.eyJodG0iOiJQT1NUIiwia\
- HR1IjoiaHR0cHM6Ly9zZXJ2ZXIuZXhhbXBsZS5jb20vdG9rZW4iLCJpYXQiOjE\
- 3NjE5Mzc4MjMsImp0aSI6ImJHOXpaV1psYm1ObFkyaHZiM05sY20ifQ.NVmGXw\
- opPNYiN7CpITgR0Fl1PYFFgIAbxPxs8N1llDPoQmR60il35b-Zez71eMkdM9gd\
- oqJkee3oKrimdrsCfA
+DPoP: eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0e\
+ SI6IkVDIiwieCI6InktNGtsS2VHYnZjY1FKRTdqd25ITVlpVkh6MjRDZkFKMzN\
+ FbGU2OFlnWkkiLCJ5IjoiV0NvQWxLY3hHVlU4aVBYb3c5UWQxUjJDdjN2bzNXQ\
+ zJxRzRJc1ZfQ2FOYyJ9LCJ0eXAiOiJkcG9wK2lkX3Rva2VuIn0.eyJodG0iOiJ\
+ QT1NUIiwiaHR1IjoiaHR0cHM6Ly9zZXJ2ZXIuZXhhbXBsZS5jb20vdG9rZW4iL\
+ CJpYXQiOjE3NjE5Mzc4MjMsImp0aSI6ImJHOXpaV1psYm1ObFkyaHZiM05sY20\
+ ifQ.ppLrMPVgYmVW_kSyZDoBzqD-8RBdAU_qn3wVJjtax70iEQYc-IaAw5lCEb\
+ F5Xep2h-PCaULEMNXYKj3wyYqqRw
 
 grant_type=refresh_token&refresh_token=8xLOxBtZp8
 ```
