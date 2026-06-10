@@ -64,13 +64,19 @@ This specification defines how to bind a public key to an OpenID Connect ID Toke
 
 # Introduction
 
-OpenID Connect is a protocol that enables a Relying Party (RP) to delegate authentication to and obtain identity claims from an OpenID Connect Provider (OP). When authenticating with OpenID Connect, an RP initiates the protocol by making an authentication request to the OP. The OP authenticates the identity of the user and sends the RP an ID Token signed by the OP and containing claims about the user.
+OpenID Connect (OIDC) enables a Relying Party (RP) to obtain End-User authentication and identity claims from an OpenID Provider (OP) in the form of an ID Token. An RP initiates the protocol by making an authentication request to the OP. The OP authenticates the End-User and returns an ID Token, signed by the OP, containing claims about the End-User.
 
-It is common for an RP to be composed of multiple components such as an RP authenticating component that obtains the ID Token from the OP and an RP consuming component which checks the ID Token presented to it by the authenticating component. When the RP authenticating component wants to prove to an RP consuming component that it has authenticated a user, it may present the ID Token as a bearer token. However, bearer tokens are vulnerable to theft and replay attacks. For instance, if an attacker obtains the ID Token, they can impersonate the authenticated user.
+An RP is often composed of multiple components, such as an RP authenticating component that obtains the ID Token from the OP and an RP consuming component that checks the ID Token presented to it by the authenticating component. To prove it has authenticated an End-User, the authenticating component may present the ID Token to the consuming component as a bearer token. However, bearer tokens are vulnerable to theft and replay attacks: an attacker who obtains the ID Token can impersonate the authenticated End-User.
 
-By binding a cryptographic key to the ID Token, the RP authenticating component can prove to RP consuming components not only that a user has been authenticated, but that the RP authenticating component itself was the original recipient of that authentication. This provides stronger security guarantees, preventing token theft and replay attacks, by transforming the ID Token from a bearer token into a proof-of-possession token.
+By binding a cryptographic key to the ID Token, the RP authenticating component can prove to RP consuming components not only that an End-User has been authenticated, but that the RP authenticating component itself was the original recipient of that authentication. This provides stronger security guarantees, preventing token theft and replay attacks, by transforming the ID Token from a bearer token into a proof-of-possession token.
 
-Use cases for this include: a mobile app that has received an ID Token exchanging the ID Token with a proof of possession to a first party authorization service for an access token; an instance of a peer-to-peer application such as video conferencing where one instance of the application sends the ID Token with a proof of possession to a second instance to prove which user is operating the first instance.
+Use cases for this include:
+
+- a mobile app that exchanges an ID Token, along with a proof of possession, at a first-party authorization service for an access token;
+- a Relying Party composed of multiple components, where an authenticating component proves to a consuming component that it is the party the OP authenticated; and
+- a peer-to-peer application, such as video conferencing or messaging, where one instance proves to another which End-User is operating it.
+
+The Use Cases appendix describes how key binding is applied in each of these scenarios.
 
 This specification profiles OpenID Connect 1.0 [@!OpenID.Core], RFC8628 - OAuth 2.0 Device Authorization Grant [@!RFC8628], and RFC9449 - OAuth 2.0 Demonstrating Proof of Possession (DPoP) [@!RFC9449] to enable cryptographically bound ID Tokens that resist theft and replay attacks while maintaining compatibility with existing OpenID Connect infrastructure.
 
@@ -95,6 +101,8 @@ This specification uses the following terms:
 - **OP**: The OpenID Provider as defined in [@!OpenID.Core].
 
 - **RP**: The Relying Party as defined in [@!OpenID.Core].
+
+- **End-User**: The End-User as defined in [@!OpenID.Core].
 
 The parameters **dpop_jkt** and **DPoP** as defined in [@!RFC9449]
 
@@ -190,9 +198,9 @@ If the OP does not support the `bound_key` scope, it SHOULD ignore it per [@!Ope
 
 ## Authentication Response
 
-If the key provided was not previously bound to the client, the OP SHOULD inform the user and obtain consent that a key binding will be done.
+If the key provided was not previously bound to the client, the OP SHOULD inform the End-User and obtain consent that a key binding will be done.
 
-On successful authentication of, and consent from the user, the OP returns an authorization `code`.
+On successful authentication of, and consent from the End-User, the OP returns an authorization `code`.
 
 Following is a non-normative example of a response:
 
@@ -282,8 +290,8 @@ Following is a non-normative example of an authentication response using the dev
 ## Token Request
 
 As per [@!RFC8628] the RP authenticating component makes token requests to OP at regular intervals.
-Prior to the OP authenticating and obtaining consent from the user, the OP returns an error.
-Once the OP has authenticated and obtained consent from the user, the OP responds by returning the ID Token.
+Prior to the OP authenticating and obtaining consent from the End-User, the OP returns an error.
+Once the OP has authenticated and obtained consent from the End-User, the OP responds by returning the ID Token.
 
 In addition to the parameters required by [@!RFC8628] the token request to the OP must contain a DPoP header.
 The RP authenticating component computes this DPoP header as follows:
@@ -325,7 +333,7 @@ The OP MUST:
 
 # Token Response
 
-If the token request was successful, the OP MUST return an ID Token containing the `cnf` claim as defined in [@!RFC7800] set to the jwk of the user's public key and with  `typ` set to `dpop+id_token` in the ID Token's protected header.
+If the token request was successful, the OP MUST return an ID Token containing the `cnf` claim as defined in [@!RFC7800] set to the jwk of the End-User's public key and with  `typ` set to `dpop+id_token` in the ID Token's protected header.
 
 Non-normative example of the ID Token payload:
 
@@ -396,7 +404,7 @@ The mechanism for how an RP authenticating component proves to an RP consuming c
 
 # Privacy Considerations
 
-An RP authenticating component SHOULD only share an ID Token with a consuming component when such sharing is consistent with the original purpose for which the identity data was collected and the scope of consent obtained from the user.
+An RP authenticating component SHOULD only share an ID Token with a consuming component when such sharing is consistent with the original purpose for which the identity data was collected and the scope of consent obtained from the End-User.
 
 # Security Considerations
 
@@ -435,6 +443,34 @@ Type name: application
 Subtype name: dpop+id_token
 
 {backmatter}
+
+# Use Cases
+
+This appendix is non-normative. It describes how the mechanisms defined in this specification are applied in representative scenarios. The mechanism by which an RP authenticating component proves possession of the private key to an RP consuming component is out of scope of this specification (see the ID Token Proof of Possession section); each use case below notes how that proof is typically realized.
+
+## Exchanging an ID Token for an Access Token
+
+A first-party application, such as a mobile app, obtains a key-bound ID Token and exchanges it, together with a proof of possession, at a first-party authorization service for an access token.
+
+Because the ID Token carries a `cnf` claim, the authorization service can confirm that the party requesting the access token is the same party the OP authenticated, rather than a bearer that obtained the ID Token in transit. Without key binding, an intercepted ID Token could be replayed to obtain an access token.
+
+The proof of possession is a DPoP proof computed over the exchange request. The authorization service verifies it against the `cnf` claim of the ID Token before issuing the access token.
+
+## Distributed Relying Party Components
+
+A Relying Party is often composed of multiple components, for example a frontend that authenticates the End-User and one or more backends that act on the End-User's behalf. The authenticating component obtains the ID Token and presents it to a consuming component to prove which End-User the OP authenticated.
+
+When the ID Token is key-bound, the consuming component requires a proof of possession alongside the ID Token. An attacker who captures the ID Token in transit between components cannot use it, because the attacker cannot produce the proof of possession.
+
+The authenticating component proves possession on each request to a consuming component, for example with a DPoP proof over that request, and the consuming component verifies the proof against the `cnf` claim before trusting the ID Token.
+
+## Peer-to-Peer Authentication
+
+In a peer-to-peer application, such as video conferencing or messaging, one instance proves to another which End-User is operating it. The instances are typically operated by different End-Users and communicate without a shared backend.
+
+Consider Alice authenticating to Bob over WebRTC. With a bearer ID Token, an attacker who relays Alice's ID Token to Bob could impersonate Alice. With a key-bound ID Token, Alice signs a value that ties her authenticated identity to the connection, such as the DTLS certificate fingerprint of her media channel, using the key in the `cnf` claim. Bob verifies that signature against the `cnf` claim and is assured both that the OP authenticated Alice and that she controls the channel he is connected to.
+
+The step that is not obvious to an implementer is binding the OIDC identity to the application's own identity or channel: the value signed under the `cnf` key must be something the consuming instance can independently associate with the session, such as a WebRTC certificate fingerprint, a messaging device key, or a per-message signature. How that value is chosen and verified is application-specific and out of scope of this specification.
 
 # Acknowledgements
 
