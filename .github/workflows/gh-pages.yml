@@ -39,13 +39,14 @@ jobs:
         BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v6
         with:
           go-version: '1.20'
+          cache: false
       
       - name: Install mmark
         run: go install github.com/mmarkdown/mmark@latest
@@ -55,7 +56,7 @@ jobs:
           mmark -2 openid-connect-key-binding-1_0.md > openid-connect-key-binding-1_0.xml
 
       - name: Upload XML artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: built-xml
           path: openid-connect-key-binding-1_0.xml
@@ -65,7 +66,7 @@ jobs:
         run: cat openid-connect-key-binding-1_0.xml
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: '3.10' 
       - name: Install xml2rfc
@@ -89,7 +90,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         if: success()
-        uses: crazy-max/ghaction-github-pages@v2
+        uses: crazy-max/ghaction-github-pages@v5
         with:
           target_branch: gh-pages
           build_dir: html
