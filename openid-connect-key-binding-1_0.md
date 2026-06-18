@@ -1,5 +1,5 @@
 %%%
-title = "OpenID Connect Key Binding 1.0 - draft 00"
+title = "OpenID Connect Key Binding 1.0 - draft 01"
 abbrev = "openid-connect-key-binding"
 ipr = "none"
 workgroup = "OpenID Connect"
@@ -520,6 +520,10 @@ specification.
 
    [[ To be removed from the final specification ]]
 
+   -01
+
+   * Added Use Cases appendix, editorial improvements, clarified DPoP proof typ must be dpop+jwt
+
    -00
 
-   initial draft
+   * initial draft
