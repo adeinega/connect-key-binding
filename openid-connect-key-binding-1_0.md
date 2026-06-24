@@ -1,5 +1,5 @@
 %%%
-title = "OpenID Connect Key Binding 1.0 - draft 01"
+title = "OpenID Connect Key Binding 1.0 - draft 02"
 abbrev = "openid-connect-key-binding"
 ipr = "none"
 workgroup = "OpenID Connect"
@@ -474,7 +474,7 @@ The step that is not obvious to an implementer is binding the OpenID Connect ide
 
 # Acknowledgements
 
-The authors would like to thank early feedback provided by Filip Skokan, Frederik Krogsdal Jacobsen, George Fletcher, Jacob Ideskog, Jonas Primbs, Karl McGuinness, and Kosuke Koiwai.
+The authors would like to thank early feedback provided by Filip Skokan, Frederik Krogsdal Jacobsen, George Fletcher, Jacob Ideskog, Jonas Primbs, Karl McGuinness, Kosuke Koiwai, and Michael Jones.
 
 # Notices
 
