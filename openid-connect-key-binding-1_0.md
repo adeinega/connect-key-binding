@@ -116,7 +116,7 @@ The OP's OpenID Connect Metadata Document [@!OpenID.Discovery] SHOULD include:
 ## Protocol Profile Overview
 
 This specification works by adding parameters and headers to the Authentication Request and Token Request and then validating these fields such that the ID Token returned in the Token Response contains a `cnf` claim for a public key.
-The RP signals to the OP that is requesting a key-bound ID Token by including the scope `bound_key` in the Authentication Request.
+The RP signals to the OP that it is requesting a key-bound ID Token by including the scope `bound_key` in the Authentication Request.
 
 This specification extends OpenID Connect with the addition of a parameter, `dpop_jkt`, to the Authentication Request, and the addition of a `DPoP` header to the Token Request and Refresh Request.
 If the OP chooses to issue a key-bound ID Token it validates the `dpop_jkt` parameter and `DPoP` header and returns an ID Token in the Token Response which includes a `cnf` claim for the public key.
